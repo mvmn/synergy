@@ -263,6 +263,25 @@ SecureSocket::initContext(bool server)
 	// drop SSLv3 support
 	SSL_CTX_set_options(m_ssl->m_context, SSL_OP_NO_SSLv3);
 
+	// Set ciphersuite list
+	// drops some ciphersuites
+	SSL_CTX_set_cipher_list(m_ssl->m_context,
+		"ECDHE-RSA-AES128-GCM-SHA256:"	"ECDHE-ECDSA-AES128-GCM-SHA256:"
+		"ECDHE-RSA-AES256-GCM-SHA384:"	"ECDHE-ECDSA-AES256-GCM-SHA384:"
+		"DHE-RSA-AES128-GCM-SHA256:"	"DHE-DSS-AES128-GCM-SHA256:"
+		"kEDH+AESGCM:"					"ECDHE-RSA-AES128-SHA256:"
+		"ECDHE-ECDSA-AES128-SHA256:"	"ECDHE-RSA-AES128-SHA:"
+		"ECDHE-ECDSA-AES128-SHA:"		"ECDHE-RSA-AES256-SHA384:"
+		"ECDHE-ECDSA-AES256-SHA384:"	"ECDHE-RSA-AES256-SHA:"
+		"ECDHE-ECDSA-AES256-SHA:"		"DHE-RSA-AES128-SHA256:"
+		"DHE-RSA-AES128-SHA:"			"DHE-DSS-AES128-SHA256:"
+		"DHE-RSA-AES256-SHA256:"		"DHE-DSS-AES256-SHA:"
+		"DHE-RSA-AES256-SHA:"			"!aNULL:"
+		"!eNULL:"						"!EXPORT:"
+		"!DES:"							"!RC4:"
+		"!3DES:"						"!MD5:"
+		"!PSK");
+
 	if (m_ssl->m_context == NULL) {
 		showError();
 	}
