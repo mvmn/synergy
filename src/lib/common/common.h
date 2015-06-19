@@ -92,7 +92,9 @@
 // VC++ specific
 #if (_MSC_VER >= 1200)
 	// work around for statement scoping bug
-#	define for if (false) { } else for
+#	if (_MSC_VER < 1700)
+#		define for if (false) { } else for
+#	endif
 
 	// turn off bonehead warnings
 #	pragma warning(disable: 4786) // identifier truncated in debug info
@@ -120,7 +122,7 @@
 #	define TYPE_OF_SIZE_4 __int32
 #else
 #	define SIZE_OF_CHAR		1
-#	define SIZE_OF_SHORT	2
+#	define SIZE_OF_SHORT		2
 #	define SIZE_OF_INT		4
 #	define SIZE_OF_LONG		4
 #endif
@@ -137,8 +139,10 @@
 #include <stddef.h>
 
 // if not c++0x, future proof code by allowing use of nullptr
-#ifndef nullptr
-#	define nullptr NULL
+#if !defined( _MSC_VER ) || (_MSC_VER < 1700)
+#	ifndef nullptr
+#		define nullptr NULL
+#	endif
 #endif
 
 // make assert available since we use it a lot
