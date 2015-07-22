@@ -521,9 +521,6 @@ void MainWindow::startSynergy()
 
 	args << "-f" << "--no-tray" << "--debug" << appConfig().logLevelText();
 
-
-    args << "--name" << m_pLineEditScreenName->text(); //getScreenName();
-
 	if (desktopMode)
 	{
 		setSynergyProcess(new QProcess(this));
@@ -619,6 +616,8 @@ void MainWindow::startSynergy()
 
 bool MainWindow::clientArgs(QStringList& args, QString& app)
 {
+    args << "--name" << m_pLineEditScreenName->text();
+    
 	app = appPath(appConfig().synergycName());
 
 	if (!QFile::exists(app))
@@ -712,7 +711,9 @@ QString MainWindow::appPath(const QString& name)
 
 bool MainWindow::serverArgs(QStringList& args, QString& app)
 {
-	app = appPath(appConfig().synergysName());
+    args << "--name" << getDefaultScreenName();
+    
+    app = appPath(appConfig().synergysName());
 
 	if (!QFile::exists(app))
 	{
