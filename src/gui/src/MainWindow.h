@@ -100,6 +100,7 @@ class MainWindow : public QMainWindow, public Ui::MainWindowBase
 		void open();
 		void clearLog();
 		VersionChecker& versionChecker() { return m_VersionChecker; }
+        QString getDefaultScreenName();
 		QString getScreenName();
 		ServerConfig& serverConfig() { return m_ServerConfig; }
 		void showConfigureServer(const QString& message);

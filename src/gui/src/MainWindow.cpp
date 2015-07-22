@@ -106,7 +106,6 @@ MainWindow::MainWindow(QSettings& settings, AppConfig& appConfig) :
 
 	m_pWidgetUpdate->hide();
 	m_VersionChecker.setApp(appPath(appConfig.synergycName()));
-	m_pLabelScreenName->setText(getScreenName());
 	m_pLabelIpAddresses->setText(getIPAddresses());
 
 #if defined(Q_OS_WIN)
@@ -283,6 +282,7 @@ void MainWindow::loadSettings()
 	m_pLineEditConfigFile->setText(settings().value("configFile", QDir::homePath() + "/" + synergyConfigName).toString());
 	m_pGroupClient->setChecked(settings().value("groupClientChecked", true).toBool());
 	m_pLineEditHostname->setText(settings().value("serverHostname").toString());
+    m_pLineEditScreenName->setText(getScreenName());
 }
 
 void MainWindow::initConnections()
@@ -304,7 +304,8 @@ void MainWindow::saveSettings()
 	settings().setValue("useInternalConfig", m_pRadioInternalConfig->isChecked());
 	settings().setValue("groupClientChecked", m_pGroupClient->isChecked());
 	settings().setValue("serverHostname", m_pLineEditHostname->text());
-
+	settings().setValue("clientScreenName", m_pLineEditScreenName->text());
+    
 	settings().sync();
 }
 
@@ -913,12 +914,22 @@ QString MainWindow::getIPAddresses()
 
 QString MainWindow::getScreenName()
 {
-	if (appConfig().screenName() == "") {
-		return QHostInfo::localHostName();
-	}
-	else {
-		return appConfig().screenName();
-	}
+    QString screenName = settings().value("clientScreenName").toString();
+    if(screenName == "") {
+        screenName = getDefaultScreenName();
+    }
+    
+    return screenName;
+}
+
+QString MainWindow::getDefaultScreenName()
+{
+    if (appConfig().screenName() == "") {
+        return QHostInfo::localHostName();
+    }
+    else {
+        return appConfig().screenName();
+    }
 }
 
 void MainWindow::changeEvent(QEvent* event)
