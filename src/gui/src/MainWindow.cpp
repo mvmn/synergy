@@ -522,7 +522,7 @@ void MainWindow::startSynergy()
 	args << "-f" << "--no-tray" << "--debug" << appConfig().logLevelText();
 
 
-	args << "--name" << getScreenName();
+    args << "--name" << m_pLineEditScreenName->text(); //getScreenName();
 
 	if (desktopMode)
 	{
